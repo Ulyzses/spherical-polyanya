@@ -73,14 +73,15 @@ export class Mesh {
       for (let j = 0; j < n; ++j) {
         const pIndex = rest[j] as PolygonIndex;
 
+        if (lat === 80.8908) {
+          debug(`Vertex ${i} has a polygon index of ${pIndex}`);
+        }
+
         assert(
           pIndex >= -1 && pIndex < P,
           `Invalid polygon index: ${pIndex}`,
         );
-
-        // Naive implementation of checking whether a vertex is ambiguous
-        // Could probably be implemented better by checking if there is only
-        // one contiguous string of obstacles (?)
+        
         if (pIndex === -1) {
           if (vertex.isCorner) {
             vertex.isAmbiguous = true;
