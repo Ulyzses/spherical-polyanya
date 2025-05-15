@@ -4,7 +4,7 @@ import { verbose } from "./main.ts";
 // deno-lint-ignore no-explicit-any
 export function debug(message: any, v: boolean = verbose): void {
   if (v) {
-    console.log(message);
+    console.error(message);
   }
 }
 

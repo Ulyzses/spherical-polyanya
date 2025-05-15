@@ -405,18 +405,22 @@ export class SearchInstance {
     }
   }
 
-  generatePath(): Point[] {
+  generatePath(): [Point[], number] {
     const path = [this.end];
     const node = this.finalNode;
 
     // Generate a new final turning point if the goal is not observable
     assert(node, "No final node found");
 
+    let distance = node.f;
+
     // Checking right non-observable
     if (Mesh.getOrientation(node.root, node.right, this.end) === Orientation.CW) {
       path.unshift(node.right);
+      distance += node.right.distance(this.end);
     } else if (Mesh.getOrientation(node.root, node.left, this.end) === Orientation.CCW) {
       path.unshift(node.left);
+      distance += node.left.distance(this.end);
     }
 
     let currNode = node;
@@ -431,24 +435,11 @@ export class SearchInstance {
 
     path.unshift(this.start);
 
-    return path;
-
-    // let currRoot = node.root;
-
-    // path.unshift(node.root);
-
-    // while (node.parent) {
-    //   if (!node.parent.root.eq(currRoot)) {
-    //     path.unshift(node.parent.root);
-    //     currRoot = node.parent.root;
-    //   }
-
-    //   node = node.parent;
-    // }
+    return [path, distance];
   }
 
-  search(): SearchNode | false {
-    // Returns true if a path is found
+  search(): [Point[], number] {
+    // Returns the path and distance from start to end
 
     debug(
       `Starting search from ${this.start.toString()} to ${this.end.toString()}`,
@@ -459,7 +450,7 @@ export class SearchInstance {
 
     if (this.endPolygons.length === 0) {
       debug("No polygons found for end point");
-      return false;
+      return [[], 0];
     }
 
     debug(
@@ -472,12 +463,12 @@ export class SearchInstance {
     // The initial nodes include the final node
     if (this.finalNode) {
       debug("Found final node");
-      return this.finalNode;
+      return this.generatePath();
     }
 
     if (this.openList.isEmpty) {
       debug("No nodes to search from");
-      return false;
+      return [[], 0];
     }
 
     debug(`Open list: ${this.openList.toString()}`);
@@ -494,7 +485,7 @@ export class SearchInstance {
 
       if (node.nextPolygon === -1) {
         // The node is a dead end
-        console.error("Dead end node");
+        debug("Dead end node");
         continue;
       }
 
@@ -505,12 +496,12 @@ export class SearchInstance {
         debug("Found final node");
         this.finalNode = node;
       
-        return this.finalNode;
+        return this.generatePath();
       }
 
       this.genSuccessors(node);
     }
 
-    return false;
+    return [[], 0];
   }
 }

@@ -73,10 +73,6 @@ export class Mesh {
       for (let j = 0; j < n; ++j) {
         const pIndex = rest[j] as PolygonIndex;
 
-        if (lat === 80.8908) {
-          debug(`Vertex ${i} has a polygon index of ${pIndex}`);
-        }
-
         assert(
           pIndex >= -1 && pIndex < P,
           `Invalid polygon index: ${pIndex}`,

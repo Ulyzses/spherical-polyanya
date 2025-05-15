@@ -3,6 +3,7 @@ import { debug, readlines } from "../utils.ts";
 import { Point } from "./Point.ts";
 
 export interface Scenario {
+  index: number;
   map: string;
   start: Point;
   end: Point;
@@ -34,7 +35,7 @@ export class ScenarioReader {
         `Invalid scenario format: ${line} (expecting 9 fields)`,
       );
 
-      // const bucket: number = parseInt(scen[0]); // unused
+      const bucket: number = parseInt(scen[0]); // used as index
       const map: string = scen[1];
       // const height: number = parseFloat(scen[2]); // unused
       // const width: number = parseFloat(scen[3]);  // unused
@@ -45,6 +46,7 @@ export class ScenarioReader {
       const optimalPath: number = parseFloat(scen[8]);
 
       yield {
+        index: bucket,
         map: map,
         start: new Point(startLat, startLon),
         end: new Point(endLat, endLon),

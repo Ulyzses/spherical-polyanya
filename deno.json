@@ -1,7 +1,8 @@
 {
   "tasks": {
+    "convert": "deno run --allow-read --allow-write converter/sph2grid.ts",
     "dev": "deno run --watch main.ts",
-    "read": "deno run --allow-read main.ts",
+    "main": "deno run --allow-read --allow-write main.ts",
     "verbose": "deno run --allow-read main.ts --verbose"
   },
   "imports": {
