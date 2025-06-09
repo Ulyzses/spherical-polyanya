@@ -1,0 +1,8 @@
+version 2
+maps/random.sph 0 -90 0 90 0
+maps/random.sph 1 45 26 0 -180
+maps/random.sph 2 0 26 88 -2
+maps/random.sph 3 90 -90 0 26
+maps/random.sph 4 0 -90 88 90
+maps/random.sph 5 -90 0 0 -90
+maps/lune.sph 0 -90 0 0 0
