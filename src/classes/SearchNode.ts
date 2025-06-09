@@ -134,10 +134,6 @@ export default class SearchNode {
       this._rightVertex.isCorner &&
       nonObservableRightRange[1] > nonObservableRightRange[0]
     ) {
-      // console.debug(
-      //   `Generating non-observable successors for right vertex ${this._rightVertex.id}`,
-      // );
-
       successors.push(
         ...this.splitSuccessors(
           this._rightVertex,
@@ -153,10 +149,6 @@ export default class SearchNode {
       this._leftVertex.isCorner &&
       nonObservableLeftRange[1] > nonObservableLeftRange[0]
     ) {
-      // console.debug(
-      //   `Generating non-observable successors for left vertex ${this._leftVertex.id}`,
-      // );
-
       successors.push(
         ...this.splitSuccessors(
           newLeftPoint,
@@ -187,7 +179,6 @@ export default class SearchNode {
     const leftAngle = Point.getOrientation(this._root, this._left, this._goal);
 
     if (rightAngle !== Orientation.ANTICLOCKWISE) {
-      // console.debug("Turn right");
       return new SearchNode(
         this,
         this._right,
@@ -200,7 +191,6 @@ export default class SearchNode {
         this._goal,
       );
     } else if (leftAngle !== Orientation.CLOCKWISE) {
-      // console.debug("Turn left");
       return new SearchNode(
         this,
         this._left,
@@ -216,7 +206,6 @@ export default class SearchNode {
       rightAngle === Orientation.ANTICLOCKWISE &&
       leftAngle === Orientation.CLOCKWISE
     ) {
-      // console.debug("Go straight");
       return new SearchNode(
         this,
         this._root,
@@ -270,8 +259,6 @@ export default class SearchNode {
 
     // Start scanning the perimeter
     for (let i = rightLocalIndex; i < leftLocalIndex; ++i) {
-      // console.debug(`Checking vertex ${this.nextPolygon.vertices[i % this.nVertices].id} in next polygon ${this.nextPolygon.id}`);
-
       const vertex = this.nextPolygon.vertices[i % this.nVertices];
       const nextVertex = this.nextPolygon.vertices[(i + 1) % this.nVertices];
 
@@ -302,14 +289,11 @@ export default class SearchNode {
             // The intersection is not valid
             continue;
           } else if (orientation === Orientation.COLLINEAR) {
-            // console.debug("Next vertex is collinear with the right ray");
 
             assert(
               r.equals(nextVertex),
               `Right intersection is not equal to next vertex: ${r.toString()} != ${nextVertex.toString()}`,
             );
-
-            // console.debug(`Right intersection is ${r.toString()}`);
 
             newRightPoint = nextVertex;
             observableRange[0] = i + 1;
@@ -320,8 +304,6 @@ export default class SearchNode {
               nonObservableRightRange[1] = i + 1;
             }
           } else {
-            // console.debug(`Next vertex is anticlockwise to the right ray`);
-
             newRightPoint = r;
             observableRange[0] = i;
 
@@ -333,11 +315,9 @@ export default class SearchNode {
           }
         } else {
           // The edge and the ray lie on the same great circle. The point of intersection is the vertex itself
-          // console.debug("Collinear intersection");
-
           assert(
             !reversed,
-            `Right intersection should not be collinear as it should have been handled prior`,
+            `Right intersection should not be collinear as it should have been handled by the previous edge`,
           );
 
           newRightPoint = vertex;
@@ -374,8 +354,6 @@ export default class SearchNode {
           );
 
           if (l.equals(nextVertex)) {
-            // console.debug("Next vertex is collinear with the left ray");
-
             newLeftPoint = nextVertex;
             observableRange[1] = i + 1;
 
@@ -385,8 +363,6 @@ export default class SearchNode {
               nonObservableLeftRange[0] = i + 1;
             }
           } else {
-            // console.debug("Next vertex is clockwise to the left ray");
-
             newLeftPoint = l;
             observableRange[1] = i + 1;
 
@@ -443,14 +419,6 @@ export default class SearchNode {
       `Non-observable left range is undefined`,
     );
 
-    // console.debug("SUMMARY");
-    // console.debug(`  Root point: ${this.root.toString()}`);
-    // console.debug(`  Non-observable right range: ${nonObservableRightRange}`);
-    // console.debug(`  Observable range: ${observableRange}`);
-    // console.debug(`  Non-observable left range: ${nonObservableLeftRange}`);
-    // console.debug(`  Right point: ${newRightPoint.toString()}`);
-    // console.debug(`  Left point: ${newLeftPoint.toString()}`);
-
     return [
       newRightPoint,
       newLeftPoint,
@@ -474,19 +442,12 @@ export default class SearchNode {
       const vertex = this.nextPolygon.vertices[i % this.nVertices];
       const nextVertex = this.nextPolygon.vertices[(i + 1) % this.nVertices];
 
-      // console.debug(
-      //   `Creating successor on edge of vertex ${vertex.id} and next vertex ${nextVertex.id}`,
-      // );
-
       const rightPoint = (i === range[0]) ? right : vertex;
       const leftPoint = (i === range[1] - 1) ? left : nextVertex;
 
       const nextPolygon = this.nextPolygon.neighbours[(i + 1) % this.nVertices];
 
       if (nextPolygon.id === -1) {
-        // console.debug(
-        //   `No next polygon for edge ${vertex.id}-${nextVertex.id}. Skipping.`,
-        // );
         continue;
       }
 
